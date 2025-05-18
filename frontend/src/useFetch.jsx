@@ -9,7 +9,7 @@ const useFetch = (url, initalData) => {
         setLoading(true)
         fetch(url)
         .then((res) => res.json())
-        .then((data) => { setData(data)})
+        .then((data) => {setData(data)})
         .catch((err) => setError(err))
         .finally(() => {setLoading(false)})
     }, [url])
