@@ -3,7 +3,7 @@ import useFetch from "../useFetch";
 import { useState } from "react";
 
 const Meetings = () => {
-  const { data, loading, error } = useFetch("http://localhost:3000/events");
+  const { data, loading, error } = useFetch("https://meetup-app-backend-red.vercel.app/events");
   const [selectedValue, setSelectedValue] = useState("");
   const [searchValue, setSearchValue] = useState("")
 
