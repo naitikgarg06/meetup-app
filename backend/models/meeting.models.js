@@ -43,6 +43,12 @@ const MeetingSchema = new mongoose.Schema({
             city: String,
         }
     }, 
+    EventSpeakers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Speaker"
+        }
+    ]
 }, {timestamps: true} )
 
 const Meeting = mongoose.model('meetings', MeetingSchema)

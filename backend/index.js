@@ -1,5 +1,8 @@
 const express = require("express");
 const cors = require('cors')
+const { initialiseDatabase } = require("./db/db.connect");
+const Speaker = require("./models/speaker.models")
+const Meeting = require("./models/meeting.models");
 
 const app = express();
 
@@ -10,37 +13,22 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-const { initialiseDatabase } = require("./db/db.connect");
-const Meeting = require("./models/meeting.models");
-
 app.use(express.json());
 initialiseDatabase();
 
-const createMeeting = async (data) => {
-  try {
-    const newMeeting = new Meeting(data);
-    const savedMeeting = await newMeeting.save();
-    return savedMeeting;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// createMeeting(meeting1)
 
 // read and get all meetings
 
 async function readAllMeetings() {
   try {
-    const meetings = await Meeting.find();
+    const meetings = await Meeting.find().populate('EventSpeakers');
     return meetings;
   } catch (error) {
     throw error;
   }
 }
 
-app.get("/meetings", async (req, res) => {
+app.get("/events", async (req, res) => {
   try {
     const allMeetings = await readAllMeetings();
     if (allMeetings.length != 0) {
@@ -52,6 +40,30 @@ app.get("/meetings", async (req, res) => {
     res.status(500).json("Failed to fetch meetings.");
   }
 });
+
+// get event by id
+
+async function readEventById(id){
+  try {
+    const event = await Meeting.findById(id).populate("EventSpeakers")
+    return event
+  } catch (error) {
+    throw error
+  }
+}
+
+app.get("/events/:eventId", async (req, res) => {
+  try {
+    const event = await readEventById(req.params.eventId)
+    if(event){
+      res.status(200).json(event)
+    } else {
+      res.status(404).json({error: "Event not found"})
+    }
+  } catch (error) {
+    res.status(500).json({error: error})
+  }
+})
 
 // listen request
 
