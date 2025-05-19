@@ -9,7 +9,7 @@ const Meetings = () => {
 
   const filteredList = data?.filter((meeting) => {
     const haveSelectedEvents = selectedValue === "" ? true : meeting.eventType === selectedValue
-    const haveSearchedEvents = searchValue === "" ? true : meeting.title.toLowerCase() === searchValue.toLowerCase() || meeting.tags.includes(searchValue.toLowerCase())
+    const haveSearchedEvents = searchValue === "" ? true : meeting.title.toLowerCase().split(" ").includes(searchValue.toLowerCase()) || meeting.tags.includes(searchValue.toLowerCase())
     return haveSelectedEvents && haveSearchedEvents
   })
 
